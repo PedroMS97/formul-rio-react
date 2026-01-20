@@ -1,21 +1,57 @@
+// Componets
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import { FiSend } from "react-icons/fi";
 import React from "react";
+import UseForm from "./components/UseForm";
+import ReviewForm from "./components/ReviewForm";
+import Thanks from "./components/Thanks";
 
-import './App.css'
+import "./App.css";
+
+// Hooks
+import { useForm } from "./components/hooks/useForm";
 function App() {
+  const formComponets = [<UseForm />, <ReviewForm />, <Thanks />];
+
+  const { currentStep, currentComponet, changeStep, isLastStep, isFirstStep } =
+    useForm(formComponets);
+
   return (
     <div className="App">
       <div className="header">
         <h2>Deixe sua avaliação</h2>
-        <p>Ficamos felizes com a sua compra, utilize o formulário abaico para avaliar o produto</p>
+        <p>
+          Ficamos felizes com a sua compra, utilize o formulário abaico para
+          avaliar o produto
+        </p>
       </div>
       <div className="form-container">
         <p>etapas</p>
-        <form>
-          
+        <form onSubmit={(e) => changeStep(currentStep + 1, e)}>
+          <div className="inputs-container">{currentComponet}</div>
+          <div className="actions">
+            {!isFirstStep && (
+              <button type="button" onClick={() => changeStep(currentStep - 1)}>
+                <GrFormPrevious />
+                <span>Voltar</span>
+              </button>
+            )}
+            {!isLastStep ? (
+              <button type="submit">
+                <span>Avançar</span>
+                <GrFormNext />
+              </button>
+            ) : (
+              <button type="button">
+                <span>Enviar</span>
+                <FiSend />
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
